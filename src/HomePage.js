@@ -1,0 +1,787 @@
+// HomePage.js
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import './styles/HomePage.css';
+import useScrollReveal from './hooks/useScrollReveal';
+import HeroSlider from './components/HeroSlider';
+// Import icons from lucide-react
+import { ChevronRight, Sparkles, Shirt, Crown, User, Mail, Phone, MapPin, Instagram, Facebook, Twitter, Clock, Wand2, Loader2, Star, Menu, Sun, Moon,Navigation } from 'lucide-react'; // Added Sun/Moon for theme toggle
+import { FaWhatsapp } from "react-icons/fa"; 
+// Import Firebase
+import { db } from './firebaseConfig';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import logo1 from "../src/assets/DOR white.png";
+import logo2 from "../src/assets/DOR black.png"
+// Import Helmet for SEO meta tags
+import { Helmet } from 'react-helmet-async';
+import CustomerReviewUpload from "./components/CustomerReviewUpload";
+import CustomerReviewsSection from "./components/CustomerReviewsSection";
+
+import CollaborationSection from "./components/CollaborationSection";
+import EarnWithUsModal from "./components/EarnWithUsModal";
+const WhatsAppIcon = ({ size = 20 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 32 32"
+    aria-hidden="true"
+  >
+    <path
+      fill="#25D366"   // ✅ OFFICIAL WHATSAPP GREEN
+      d="M19.11 17.33c-.27-.14-1.57-.77-1.81-.85-.24-.09-.42-.14-.6.14-.17.27-.69.85-.84 1.03-.15.17-.31.19-.58.07-.27-.14-1.13-.42-2.16-1.33-.8-.7-1.35-1.56-1.51-1.83-.16-.27-.02-.42.12-.56.13-.13.27-.31.4-.47.13-.16.17-.27.27-.45.09-.18.05-.33-.02-.47-.07-.14-.6-1.44-.82-1.97-.22-.53-.44-.46-.6-.46-.16 0-.33-.02-.51-.02-.18 0-.47.07-.72.33-.25.27-.95.93-.95 2.27 0 1.33.97 2.63 1.11 2.81.14.18 1.91 2.93 4.63 4.1 2.72 1.17 2.72.78 3.21.75.49-.02 1.57-.64 1.79-1.27.22-.64.22-1.19.16-1.31-.05-.13-.24-.2-.51-.33zM16 3C9.37 3 4 8.37 4 15c0 2.11.55 4.09 1.51 5.8L4 29l8.36-1.48C13.99 28.45 14.98 28.6 16 28.6c6.63 0 12-5.37 12-12S22.63 3 16 3zm0 22.8c-.96 0-1.9-.16-2.78-.48l-.2-.07-4.87.86.9-4.75-.1-.2A9.83 9.83 0 0 1 6.8 15c0-5.07 4.13-9.2 9.2-9.2s9.2 4.13 9.2 9.2-4.13 9.2-9.2 9.2z"
+    />
+  </svg>
+);
+
+
+function HomePage() {
+  const [menCategories, setMenCategories] = useState([]);
+  const [womenCategories, setWomenCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [categoryError, setCategoryError] = useState('');
+  const [allProducts, setAllProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+  const [productFetchError, setProductFetchError] = useState('');
+
+  // Store Locations Data - Now fetched dynamically
+  const [storeLocations, setStoreLocations] = useState([]);
+  const [loadingStores, setLoadingStores] = useState(true);
+  const [storeError, setStoreError] = useState('');
+const [showEarnModal, setShowEarnModal] = useState(false); // <--- ADD THIS
+  // NEW THEME STATE & TOGGLE FUNCTION
+const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const toggleTheme = () => {
+    setTheme(currentTheme => {
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme); // Save the new theme choice
+      return newTheme;
+    });
+  };
+  // END NEW THEME STATE
+
+  // NEW STATE: State for modal visibility
+  const [showStoreModal, setShowStoreModal] = useState(true);
+  // NEW STATE for scroll effect
+  const [scrolled, setScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation(); // Get the current location object
+
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash.substring(1));
+      if (element) {
+        // Scroll smoothly to the element
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // After scrolling, remove the hash from the URL
+          // Use replaceState to change the URL without adding a new entry to the browser history
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }, 100); // Small delay to allow scroll to initiate
+      }
+    }
+  }, [location]); // Re-run effect when the location object (specifically the hash) changes
+  // Re-run effect when the location object (specifically the hash) changes
+  useEffect(() => {
+    // Use setTimeout with a small delay to override browser's scroll restoration
+    setTimeout(() => {
+      window.scrollTo(0, 0); // Scroll to the very top (x=0, y=0)
+    }, 0); // A 0ms delay moves it to the end of the current JavaScript execution queue
+  }, []);
+  // Effect for scroll to add/remove 'scrolled' class
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      if (offset > 50) { // Adjust this value as needed
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  // Data for Testimonials (can also be fetched from Firebase)
+  const stores = [
+  {
+    id: "pune-wakad",
+    name: "DOR — Pune - PCMC",
+    address: "Mount Vert Society Square, Hinjawadi - Aundh Rd, next to Yug Honda, Kaspate Wasti, Pimpri-Chinchwad, Maharashtra 411057",
+    phoneDisplay: "+918698797007",
+    phone: "+918698797007",
+    email: "contact@dordressonrent.com",
+    instagram: "https://www.instagram.com/dor_designer?igsh=MWp4dmgyMWdibnMxcw==",
+    facebook: "https://www.facebook.com/share/1D8F1q6RRZ/?mibextid=wwXIfr",
+    whatsapp: "https://wa.me/918698797007?text=Hi%20DOR%20Wakad%2C%20I%27d%20like%20to%20rent%20an%20outfit",
+    mapsDest: "https://share.google/jfvJEM6NjSnFAktzG",
+  },
+ 
+  {
+    id: "nagpur-civillines",
+    name: "DOR — Nagpur",
+    address: "BSGN SOCIETY, 7, above ANNA IDLI, Shyam Nagar, Manish Nagar, Somalwada, Nagpur, Maharashtra 440037",
+    phoneDisplay: "+918698797007",
+    phone: "+918698797007",
+    email: "contact@dordressonrent.com",
+    instagram: "https://www.instagram.com/dor_designer?igsh=MWp4dmgyMWdibnMxcw==",
+    facebook: "https://www.facebook.com/share/1D8F1q6RRZ/?mibextid=wwXIfr",
+    whatsapp: "https://wa.me/918698797007?text=Hi%20DOR%20Nagpur%2C%20need%20help%20with%20rentals",
+    mapsDest: "https://share.google/aTKF4L5rbS4etRfLd",
+  },
+   {
+    id: "pune-mgroad",
+    name: "DOR — Mumbai",
+    address: "Showroom no.1 & 2, Nutan Dream, Madhur society, Babhai Naka, Borivali West, Mumbai, Maharashtra - 400092",
+    phoneDisplay: "+918698797007",
+    phone: "+918698797007",
+    email: "contact@dordressonrent.com",
+    instagram: "https://www.instagram.com/dor_designer?igsh=MWp4dmgyMWdibnMxcw==",
+    facebook: "https://www.facebook.com/share/1D8F1q6RRZ/?mibextid=wwXIfr",
+    whatsapp: "https://wa.me/918698797007?text=Hi%20DOR%20Pune%2C%20I%27d%20like%20to%20rent%20an%20outfit",
+    mapsDest: "https://share.google/Nhmiv11PWx4sATzHi",
+  },
+];
+
+
+  
+  // State for the image slider
+  const [currentSlide, setCurrentSlide] = useState(0);
+  // State for mobile menu open/close
+
+  // State for Style Advisor feature
+  const [eventDescription, setEventDescription] = useState('');
+  const [styleAdvice, setStyleAdvice] = useState('');
+  const [isLoadingAdvice, setIsLoadingAdvice] = useState(false);
+  const [adviceError, setAdviceError] = useState('');
+
+  // --- Firebase Data Fetching for Categories ---
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoadingCategories(true);
+      setCategoryError('');
+      try {
+        const menQuery = query(collection(db, 'menCategories'), orderBy('order'));
+        const menSnapshot = await getDocs(menQuery);
+        const menData = menSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setMenCategories(menData);
+
+        const womenQuery = query(collection(db, 'womenCategories'), orderBy('order'));
+        const womenSnapshot = await getDocs(womenQuery);
+        const womenData = womenSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setWomenCategories(womenData);
+
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setCategoryError("Failed to load categories. Please try again later.");
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // --- Firebase Data Fetching for Stores ---
+  useEffect(() => {
+    const fetchStores = async () => {
+      setLoadingStores(true);
+      setStoreError('');
+      try {
+        const storesCollectionRef = collection(db, 'filterOptions', 'stores', 'list');
+        const storeSnapshot = await getDocs(storesCollectionRef);
+        // Assuming each store document has a 'name' field and potentially an 'image' field
+        const fetchedStores = storeSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id,Address: doc.data().Address ||'', image: doc.data().imageUrl || `https://placehold.co/1200x600/404040/e0e0e0?text=${doc.id.replace(/\s/g, '+')}` }));
+        setStoreLocations(fetchedStores);
+        console.log(storeLocations)
+      } catch (error) {
+        console.error("Error fetching store locations:", error);
+        setStoreError("Failed to load store locations. Please try again.");
+      } finally {
+        setLoadingStores(false);
+      }
+    };
+
+    fetchStores();
+  }, []); // Run once on component mount
+
+  // Auto-slide functionality for store images
+  useEffect(() => {
+    if (storeLocations.length > 0) { // Only start slider if stores are loaded
+      const slideInterval = setInterval(() => {
+        setCurrentSlide((prevSlide) => (prevSlide + 1) % storeLocations.length);
+      }, 5000);
+
+      return () => clearInterval(slideInterval);
+    }
+  }, [storeLocations.length]);
+
+  // Function to handle dot clicks for slider
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
+
+  // Function to toggle mobile menu visibility
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // Function to get style advice from Gemini API
+ 
+
+  // --- Scroll Reveal Hooks for each section ---
+  const [storesRef, storesIsVisible] = useScrollReveal({ threshold: 0.2 });
+  const [sliderRef, sliderIsVisible] = useScrollReveal({ threshold: 0.2 });
+  const [menRef, menIsVisible] = useScrollReveal({ threshold: 0.2 });
+  const [womenRef, womenIsVisible] = useScrollReveal({ threshold: 0.2 });
+  const [howItWorksRef, howItWorksIsVisible] = useScrollReveal({ threshold: 0.3 });
+  const [styleAdvisorRef, styleAdvisorIsVisible] = useScrollReveal({ threshold: 0.2 });
+  const [aboutUsRef, aboutUsIsVisible] = useScrollReveal({ threshold: 0.2 });
+  const [testimonialsRef, testimonialsIsVisible] = useScrollReveal({ threshold: 0.2 });
+
+  return (
+    // APPLY THE DYNAMIC THEME CLASS HERE
+    <div className={`home-page ${theme === 'light' ? 'light-theme' : 'dark-theme'}`}>
+      {/* Store Selection Modal */}
+      {/* SEO Optimization with React Helmet */}
+      <Helmet>
+        {/* Optimized Title Tag */}
+        <title>Dress On Rent (DOR): Luxury Lehengas, Sherwanis & Gowns for Rent in Pune & Nagpur</title>
+
+        {/* Optimized Meta Description */}
+        <meta name="description" content="DOR offers exquisite designer lehengas, bridal gowns, sherwanis, and suits for rent in Pune & Nagpur. Discover sustainable luxury for weddings, parties, and special occasions. Book your rental outfit today! Find affordable, eco-friendly dress rental services with hassle-free options." />
+
+        {/* Optimized Meta Keywords (less impactful now, but good to include) */}
+        <meta name="keywords" content="dress on rent Pune, dress on rent Nagpur, outfit rental Pune, clothes rental Nagpur, fashion rental Pune, designer dress rental Nagpur, luxury dress on rent Pune, rental formal wear Pune, rental ethnic wear Nagpur, sherwani on rent Pune, suit on rent Nagpur, tuxedo on rent Pune, jodhpuri suit on rent Nagpur, men's wedding wear rental Pune, blazer on rent Nagpur, men's party wear rental Pune, lehenga on rent Pune, bridal lehenga on rent Nagpur, gown on rent Pune, pre-wedding gown on rent Nagpur, sangeet gown on rent Pune, reception gown on rent Nagpur, maternity gown on rent Pune, bridal maternity gown on rent Nagpur, women's ethnic wear rental Pune, women's party wear rental Nagpur, designer gown rental Pune, wedding dress on rent Pune, engagement dress on rent Nagpur, reception outfit on rent Pune, party wear on rent Nagpur, festival outfit on rent Pune, photoshoot dress on rent Nagpur, dress on rent Wakad, lehenga on rent Koregaon Park, suit on rent Baner, dress on rent Camp Pune, affordable dress rental Pune, eco-friendly fashion rental Nagpur, sustainable dress rental Pune, budget-friendly rental outfits, hassle-free dress rental, DOR dress on rent, DOR Pune, DOR Nagpur, dress on rent Pimpri Chinchwad, lehenga on rent Kothrud, suit on rent Hadapsar, gown on rent Viman Nagar, sherwani rental Karve Nagar, dress on rent Deolali Nagpur, tuxedo rental Wardha Road Nagpur, party wear rental Baner, ethnic wear rental Aundh, dress on rent near me Pune, lehenga rental near me Nagpur, pre-wedding shoot dress on rent Pune, engagement gown on rent Nagpur, cocktail party dress on rent Pune, sangeet outfit on hire Nagpur, haldi ceremony dress on rent Pune, reception gown rental Pune, anniversary party dress on rent Nagpur, corporate event suit rental Pune, graduation gown on rent Pune, fancy dress on rent Pune, prom dress on rent Nagpur, embroidered lehenga on rent Pune, velvet sherwani on rent Nagpur, silk gown on rent Pune, sequin dress on rent Nagpur, designer replica lehenga on rent Pune, indo-western outfit on rent Nagpur, traditional Marathi dress on rent Pune, save money on wedding dress Pune, avoid buying expensive lehenga Nagpur, rent vs buy ethnic wear Nagpur, budget friendly wedding outfit Pune, convenient dress rental service Nagpur, hassle-free formal wear rental Pune, where to rent designer lehengas in Pune, how to find affordable suits on rent Nagpur, best place to rent wedding gowns Pune, cost of lehenga on rent in Pune, dress rental for photoshoot near Nagpur, mens formal wear rental options Pune, latest collection of gowns on rent Nagpur, ethnic wear hire Pune, formal wear hire Nagpur, outfit hire Pune, attire rental Nagpur, garment rental Pune, clothing rental Nagpur, boutique rental Pune" />
+
+        {/* LocalBusiness Schema Markup for Pune and Nagpur locations (JSON-LD) */}
+        {/* IMPORTANT: Replace all placeholder URLs, addresses, and contact info with your actual details */}
+        <script type="application/ld+json">
+          {`
+          {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "DOR - Dress On Rent",
+            "url": "https://www.dordressonrent.com/", // *** REPLACE with your actual website URL ***
+            "image": "https://www.yourdorwebsite.com/logo.png", // *** REPLACE with your logo URL (e.g., a high-res logo) ***
+            "description": "DOR offers premium lehengas, sherwanis, suits, gowns, and bridal wear on rent in Pune & Nagpur for weddings, parties, and special events. Find affordable, eco-friendly, and hassle-free dress rental services including designer outfits, maternity gowns, and specific occasion wear.",
+            "address": [
+              {
+                "@type": "PostalAddress",
+                "streetAddress": "Pudumjee Compound, 815/816, near Pudumjee Police Station, next to Smato, Camp, Bhawani Peth, Pune", // *** REPLACE with actual Pune address ***
+                "addressLocality": "Pune",
+                "addressRegion": "MH",
+                "postalCode": "411001", // *** REPLACE with actual Pune postal code ***
+                "addressCountry": "IN"
+              },
+                {
+                "@type": "PostalAddress",
+                "streetAddress": "Mount Vert Society, Square, Hinjewadi, Hinjawadi - Aundh Rd, next to Yug Honda, Kaspate Wasti, Pimpri-Chinchwad", // *** REPLACE with actual Pune address ***
+                "addressLocality": "Pimpri-Chinchwad",
+                "addressRegion": "MH",
+                "postalCode": "411057", // *** REPLACE with actual Pune postal code ***
+                "addressCountry": "IN"
+              },
+              {
+                "@type": "PostalAddres",
+                "streetAddress": "BSGN SOCIETY, 7, above ANNA IDLI, Shyam Nagar, Manish Nagar, Somalwada, Nagpur", // *** REPLACE with actual Nagpur address ***
+                "addressLocality": "Nagpur",
+                "addressRegion": "MH",
+                "postalCode": "440037", // *** REPLACE with actual Nagpur postal code ***
+                "addressCountry": "IN"
+              }
+            ],
+            "telephone": "+918698797007", // *** REPLACE with your actual contact number (e.g., +919876543210) ***
+            "priceRange": "500", // Indicative price range (e.g., $, $$, $$$)
+            "openingHoursSpecification": [
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+                ],
+                "opens": "10:00", // Your opening time
+                "closes": "21:00" // Your closing time
+              }
+            ],
+            "sameAs": [
+              "https://www.instagram.com/dor_designer?igsh=MWp4dmgyMWdibnMxcw==", // *** REPLACE with your Instagram URL ***
+              "https://www.facebook.com/share/1D8F1q6RRZ/?mibextid=wwXIfr", // *** REPLACE with your Facebook URL ***
+              "https://wa.me/918698797007?text=Hi%20DOR%20Wakad%2C%20I%27d%20like%20to%20rent%20an%20outfit" // *** REPLACE with your Twitter URL if applicable ***
+            ]
+          }
+        `} 
+        </script>
+      </Helmet>
+      {showStoreModal && (
+        <div className="modal7-overlay">
+          <div className="modal7-content">
+            <h2 className="modal7-title">Welcome to DOR Dress On Rent!</h2>
+            <p className="modal7-description">Please select your preferred store location to start Browse our collections.</p>
+            {loadingStores ? (
+              <div className="modal7-loading">
+                <Loader2 size={32} className="animate-spin text-blue-500" />
+                <p className="message-text">Loading stores...</p>
+              </div>
+            ) : storeError ? (
+              <p className="modal7-error">{storeError}</p>
+            ) : (
+              <div className="modal7-store-options">
+                {storeLocations.map((store) => (
+                  <button
+                    key={store.id}
+                    className="btn btn-primary modal7-store-button"
+                    onClick={() => {
+                      localStorage.setItem('selectedStore', store.name);
+                      setShowStoreModal(false);
+                    }}
+                  >
+                    
+                    <span className="modal7-button-text">{store.name}  {store.Address}</span>
+
+                  </button>
+                  
+                ))}
+                <button
+                    className="btn btn-primary modal7-store-button"
+                    onClick={() => {
+                      
+                    }}
+                  >
+                    
+                  <span className="modal7-button-text">Mumbai (Coming Soon)</span>
+
+                  </button>
+
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      <EarnWithUsModal
+          showEarnModal={showEarnModal}
+          setShowEarnModal={setShowEarnModal}
+          theme={theme}
+      />
+
+      {/* Header */}
+
+      <header className={`header ${scrolled ? 'scrolled' : ''}`}>
+  <div className="header-container">
+<a href="#" className="header-logo animate-pulse-custom">
+        <div className="logo-3d-container">
+          <img
+            src={theme === 'light' ? logo2 : logo1}
+            alt="Dress On Rent"
+            className="logo-image"
+          />
+        </div>
+      </a>
+    <div className="header-nav-wrapper">
+      <nav className="desktop-nav">
+        <a href="#men" className="nav-link group">
+          Men
+          <span className="nav-link-underline"></span>
+        </a>
+        <a href="#women" className="nav-link group">
+          Women
+          <span className="nav-link-underline"></span>
+        </a>
+        <a href="#stores-location" className="nav-link group">
+          Stores Location
+          <span className="nav-link-underline"></span>
+        </a>
+       <a 
+      href="#" 
+      onClick={(e) => {e.preventDefault(); setShowEarnModal(true);}} 
+      className="nav-link group"
+  >
+    Earn With Us
+    <span className="nav-link-underline"></span>
+  </a>
+        <a href="#contact" className="nav-link group">
+          Contact Us
+          <span className="nav-link-underline"></span>
+        </a>
+
+        <a href="#franchise" className="nav-link group">
+          Franchise
+          <span className="nav-link-underline"></span>
+        </a>
+        <a href="/blog" className="nav-link group">
+  Blog
+  <span className="nav-link-underline"></span>
+</a>
+        
+        {/* NEW THEME TOGGLE BUTTON for Desktop */}
+        <button
+          onClick={toggleTheme}
+          className={`theme-toggle-button ${theme === 'light' ? 'light-mode' : 'dark-mode'}`}
+          aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+        >
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+        {/* END NEW THEME TOGGLE BUTTON */}
+
+        <a href="#men" className="cta-button">
+          Rent Now
+          <ChevronRight size={18} className="icon-right" />
+        </a>
+      </nav>
+
+      {/* ✅ NEW: SOCIAL ICONS IN DESKTOP HEADER */}
+      
+
+      <button
+        className={`mobile-menu-button animate-slow-spin ${isMobileMenuOpen ? 'rotate-90' : ''}`}
+        onClick={toggleMobileMenu}
+        aria-expanded={isMobileMenuOpen}
+        aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+      >
+        <Menu size={28} />
+      </button>
+    </div>
+  </div>
+
+  {isMobileMenuOpen && (
+    <nav className="mobile-nav">
+      <ul className="mobile-nav-list">
+        <li><a href="#men" className="mobile-nav-item" onClick={toggleMobileMenu}>Men's Collection</a></li>
+        <li><a href="#women" className="mobile-nav-item" onClick={toggleMobileMenu}>Women's Collection</a></li>
+        <li><a href="#stores-location" className="mobile-nav-item" onClick={toggleMobileMenu}>Our Stores Location</a></li>
+        <li><a href="#contact" className="mobile-nav-item" onClick={toggleMobileMenu}>Contact Us</a></li>
+        <li><a href="#franchise" className="mobile-nav-item" onClick={toggleMobileMenu}>Franchise Opportunities</a></li>
+        <li><a href="/blog" className="mobile-nav-item" onClick={toggleMobileMenu}>Blog</a></li>
+
+<li>
+            <button
+                onClick={() => {
+                    setShowEarnModal(true);
+                    toggleMobileMenu(); // Close mobile menu after opening modal
+                }}
+                className="mobile-nav-item"
+                style={{ color: 'var(--color-accent)', fontWeight: 'bold', background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+            >
+                Earn with Us
+            </button>
+        </li>
+        {/* NEW THEME TOGGLE BUTTON for Mobile */}
+        <li>
+          <button
+            onClick={toggleTheme}
+            className="mobile-nav-item theme-toggle-mobile"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            {theme === 'dark' ? <Sun size={18} className="mr-2" /> : <Moon size={18} className="mr-2" />}
+            Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode
+          </button>
+        </li>
+        {/* END NEW THEME TOGGLE BUTTON */}
+
+        <li>
+          <a href="#men" className="mobile-nav-item" onClick={toggleMobileMenu} style={{ color: '#db2777', fontWeight: 'bold' }}>
+            Rent Now
+          </a>
+        </li>
+
+        {/* ✅ NEW MOBILE SOCIAL ICONS */}
+        
+      </ul>
+    </nav>
+  )}
+</header>
+{/* LEFT STICKY SOCIAL BAR */}
+<div className="left-social-bar">
+  <a href="https://www.instagram.com/dor_designer?igsh=MWp4dmgyMWdibnMxcw==" target="_blank">
+    <Instagram size={22} className="icon-instagram" />
+  </a>
+  <a href="https://www.facebook.com/share/1D8F1q6RRZ/?mibextid=wwXIfr" target="_blank">
+    <Facebook size={22} className="icon-facebook" />
+  </a>
+  <a href="https://wa.me/918698797007?text=Hi%20DOR%20%2C%20need%20help%20with%20rentals" target="_blank">
+    <WhatsAppIcon size={22} className="icon-whatsapp" />
+  </a>
+</div>
+
+
+
+      {/* Hero Section */}
+      {/* Hero Section - Alternative Design */}
+      {/* Hero Section - Split Layout Design */}
+      {/* Hero Section - Ultimate Design with Background Image */}
+      {/* <section className="hero-section-ultimate">
+
+  <div className="hero-carousel">
+    <div className="hero-slide slide1"></div>
+    <div className="hero-slide slide2"></div>
+    <div className="hero-slide slide3"></div>
+    <div className="hero-slide slide4"></div>
+  </div>
+
+  <div className="hero-buttons-center hero-buttons--floatA">
+    <a href="#women" className="cta-button cta-glow animate-cta-in">
+      Women's Collection <ChevronRight size={18} className="icon-right" />
+    </a>
+
+    <a href="#men" className="cta-button cta-outline animate-cta-in">
+      Men's Collection <ChevronRight size={18} className="icon-right" />
+    </a>
+  </div>
+
+</section> */}
+<HeroSlider/>
+      {/* Store Locations Section */}
+      {/* Store Locations Section */}
+<section id="stores-location"
+  ref={storesRef}
+  // Removed 'bg-white' to inherit the theme's soft off-white background (var(--color-dark))
+  className={`section collab-collection ${storesIsVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-8'}`}>
+  <div className="container text-center">
+    {/* H2 tag is already well-placed for section title */}
+    <h2 className="section-title">DOR Dress On Rent Stores in Pune & Nagpur</h2>
+    {loadingStores ? (
+      <div className="message-container loading">
+        <Loader2 size={48} className="animate-spin text-blue-500" />
+        <p className="message-text">Loading our dress rental stores...</p>
+      </div>
+    ) : storeError ? (
+      <p className="message-container error">{storeError}</p>
+    ) : storeLocations.length === 0 ? (
+      <p className="message-container no-products">No store locations found.</p>
+    ) : (
+      <div className="grid-3-col">
+        {storeLocations.map((store) => (
+          
+          <div key={store.id} className="store-card">
+            <img
+              src={store.image || ""}
+              alt={`DOR Dress On Rent store location in ${store.name} for gown and suit rentals, including options for ${store.name.includes('Pune') ? 'Pimpri Chinchwad, Kothrud' : 'Deolali, Wardha Road'}`}
+              className="store-card-image"
+              loading="lazy"
+              onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/400x300/cccccc/333333?text=DOR ${store.name} Store`; }}
+            />
+            {/* H3 tag is appropriate for individual store names */}
+            <h3 className="card-title">{store.name} Store</h3>
+            {/* If store.address is available, you might consider adding it here as well for local SEO */}
+            {store.Address && <p className="store-address">{store.Address}</p>}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+      {/* Store Image Slider */}
+      
+      {/* Women's Collection Section */}
+      <section id="women" ref={womenRef} className={`section bg-neutral-100 collab-collection ${womenIsVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-8'}`}>
+        <div className="container">
+          {/* H2 tag is appropriate for the section title */}
+          <h2 className="section-title">Women's Collection </h2>
+
+          {loadingCategories ? (
+            <p className="text-center text-gray-600">Loading women's rental categories...</p>
+          ) : categoryError ? (
+            <p className="text-center text-red-500">{categoryError}</p>
+          ) : (
+            <div className={`grid-4-col stagger-grid ${womenIsVisible ? 'is-visible' : ''}`}>
+  {womenCategories.map((category) => (
+    <Link
+      to={`/collection/women/${category.name}`}
+      key={category.id}
+      className="category-card alt-card reveal-item"
+      aria-label={`Explore Women's ${category.name} collection for rent`}
+    >
+      <img
+        src={category.imageUrl || category.image}
+        alt={`DOR Women's ${category.name} for rent in Pune and Nagpur, ideal for bridal, pre-wedding, or party wear`}
+        className="category-card-image"
+        loading="lazy"
+        onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/400x300/cccccc/333333?text=Women's ${category.name}`; }}
+      />
+      <div className="category-card-content">
+        <h3 className="card-title">{category.name}</h3>
+        <p className="card-subtitle">Discover More</p>
+      </div>
+    </Link>
+  ))}
+</div>
+
+          )}
+        </div>
+      </section>
+      {/* Men's Collection Section */}
+
+      <section id="men" ref={menRef} className={`section bg-white collab-collection  ${menIsVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-8'}`}>
+  <div className="container">
+    <h2 className="section-title">Men's Collection</h2>
+
+    {loadingCategories ? (
+      <p className="text-center text-gray-600">Loading men's rental categories...</p>
+    ) : categoryError ? (
+      <p className="text-center text-red-500">{categoryError}</p>
+    ) : (
+      /* ⬇️ add stagger-grid + visibility toggle */
+      <div className={`grid-4-col stagger-grid ${menIsVisible ? 'is-visible' : ''}`}>
+        {menCategories.map((category) => (
+          <Link
+            to={`/collection/men/${category.name}`}
+            key={category.id}
+            /* ⬇️ mark each card as a reveal-item */
+            className="category-card reveal-item"
+            aria-label={`Explore Men's ${category.name} collection for rent`}
+          >
+            <img
+              src={category.imageUrl || category.image}
+              alt={`DOR Men's ${category.name} collection for rent in Pune and Nagpur, including wedding wear and party wear options`}
+              className="category-card-image"
+              loading="lazy"
+              onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/400x300/cccccc/333333?text=Men's ${category.name}`; }}
+            />
+            <div className="category-card-content">
+              <h3 className="card-title">{category.name}</h3>
+              <p className="card-subtitle">Explore Styles</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+
+      
+
+
+      {/* How It Works Section */}
+   
+
+       <CollaborationSection />
+
+      {/* ✨ Style Advisor Section (Gemini API Integration) ✨ */}
+         {/* uploader */}
+      
+
+      {/* live list */}
+      {/* <CustomerReviewsSection /> */}
+      <CustomerReviewUpload onSubmitted={() => console.log("uploaded")} />
+      
+      
+
+      {/* SEO Change 5: Add Organization Schema Markup using Helmet */}
+      {/* This should be placed within your main <Helmet> component at the top of HomePage.js */}
+      {/* If you already have a Helmet component, add this script tag inside it. */}
+      <Helmet>
+        <script type="application/ld+json">
+          {`
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "DOR - Dress On Rent",
+                    "url": "https://www.your-website.com", // REPLACE with your actual website URL
+                    "logo": "https://www.your-website.com/path/to/your/logo.png", // REPLACE with your logo image URL
+                    "description": "DOR (Dress On Rent) offers luxury dress rentals for men and women in Pune and Nagpur, including designer gowns, lehengas, sherwanis, and suits for all special occasions. We provide affordable, eco-friendly, and hassle-free fashion rental services for weddings, parties, pre-wedding shoots, and corporate events.",
+                    "sameAs": [
+                        "https://www.facebook.com/your-facebook-page", // REPLACE with your actual Facebook URL
+                        "https://www.instagram.com/your-instagram-page", // REPLACE with your actual Instagram URL
+                        "https://twitter.com/your-twitter-handle" // REPLACE with your actual Twitter URL
+                        // Add other social media links as needed
+                    ],
+                    "address": {
+                        "@type": "PostalAddress",
+                        "streetAddress": "Your Main Store Street Address, e.g., Shop No 5, ABC Towers", // REPLACE with your main store's street address for Pune
+                        "addressLocality": "Pune",
+                        "addressRegion": "Maharashtra",
+                        "postalCode": "411001", // REPLACE with your main store's postal code for Pune
+                        "addressCountry": "IN"
+                    },
+                    "contactPoint": {
+                        "@type": "ContactPoint",
+                        "telephone": "+91-98765-43210", // REPLACE with your primary contact number
+                        "contactType": "customer service"
+                    }
+                }
+            `}
+        </script>
+      </Helmet>
+
+      {/* Footer */}
+      <footer id="contact" className="footer">
+      <div className="footer-container">
+        {stores.map((s) => (
+          <div className="footer-col" key={s.id}>
+            <h3 className="footer-heading">{s.name}</h3>
+            <ul className="footer-list">
+              <li className="contact-item align-start">
+                <MapPin size={18} className="icon-mr" />
+                <address className="address-text">{s.address}</address>
+              </li>
+              <li className="contact-item">
+                <Phone size={18} className="icon-mr" />
+                <a href={`tel:${s.phone}`} className="footer-link">{s.phoneDisplay}</a>
+              </li>
+              <li className="contact-item">
+                <Mail size={18} className="icon-mr" />
+                <a href={`mailto:${s.email}`} className="footer-link">{s.email}</a>
+              </li>
+            </ul>
+
+            <div className="social-links" style={{ marginTop: ".75rem" }}>
+              <a
+                href={s.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon animate-social-pop"
+                aria-label={`${s.name} on Instagram`}
+                title="Instagram"
+              >
+                <Instagram size={22} className="icon-instagram" />
+              </a>
+
+              <a
+                href={s.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon animate-social-pop"
+                aria-label={`${s.name} on Facebook`}
+                title="Facebook"
+              >
+                <Facebook size={22} className="icon-facebook" />
+              </a>
+
+              <a
+                href={s.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon animate-social-pop"
+                aria-label={`WhatsApp ${s.name}`}
+                title="WhatsApp"
+              >
+                <FaWhatsapp size={22} className="icon-whatsapp" />
+              </a>
+
+              <a
+                href={`${s.mapsDest}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon animate-social-pop"
+                aria-label={`Directions to ${s.name}`}
+                title="Get Directions"
+              >
+                <Navigation size={22} />
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="copyright">
+        &copy; {new Date().getFullYear()} DOR. All rights reserved.
+      </div>
+    </footer>
+    </div>
+  );
+}
+
+export default HomePage;

@@ -1,0 +1,268 @@
+:root {
+  --color-dark: #2C2B30;
+  --color-mid: #4F4F51;
+  --color-light: #D6D6D6;
+  --color-accent: #F2C4CE;
+  --carousel-gap: clamp(16px, 2.5vw, 24px); /* New: Define gap as a variable */
+}
+
+/* SECTION BACKGROUND */
+.reviews-section {
+  position: relative;
+  padding: clamp(40px, 6vw, 96px) 0;
+  background:
+  
+  radial-gradient(80% 140% at 50% 0%, rgba(255,229,191,0.12) 0%, transparent 70%),
+  radial-gradient(80% 140% at 80% 90%, rgba(163,120,70,0.10) 0%, transparent 70%),
+  radial-gradient(80% 140% at 20% 90%, rgba(255,215,165,0.10) 0%, transparent 70%),
+  var(--color-dark);
+
+    /* radial-gradient(80% 140% at 50% 0%, rgba(242,196,206,.20) 0%, transparent 70%),
+    radial-gradient(80% 140% at 85% 95%, rgba(116,93,255,.14) 0%, transparent 70%),
+    radial-gradient(80% 140% at 15% 95%, rgba(255,171,202,.14) 0%, transparent 70%),
+    var(--color-dark); */
+  color: var(--color-light);
+  overflow: hidden;
+}
+
+/* Floating shimmer background */
+.reviews-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(40% 60% at 50% 25%, rgba(255,255,255,.07), transparent 60%);
+  animation: reviewsGlow 12s ease-in-out infinite alternate;
+}
+@keyframes reviewsGlow {
+  0% { transform: translateY(-10px); opacity: .3; }
+  100% { transform: translateY(10px); opacity: .55; }
+}
+
+/* HEADER */
+.reviews-header {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 40px;
+}
+.reviews-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-light);
+  display: inline-block;
+  position: relative;
+}
+.reviews-title::after {
+  content: "";
+  position: absolute;
+  bottom: -6px; left: 50%;
+  transform: translateX(-50%);
+  width: 55%;
+  height: 2px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  filter: blur(1px);
+}
+.reviews-subtitle {
+  color: var(--color-accent);
+  margin-top: 6px;
+  font-size: 1rem;
+}
+
+/* CAROUSEL (REPLACING GRID) */
+.reviews-carousel {
+  /* Use full width of container */
+  width: 100%;
+  margin: 0 auto;
+  
+  /* Horizontal Grid/Flex setup */
+  display: grid;
+  grid-auto-flow: column; /* Lays items out in a single row */
+  gap: var(--carousel-gap);
+  
+  /* Scrolling and Snapping */
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory; /* The premium "sliding" effect */
+  scroll-padding-left: clamp(20px, 3vw, 40px);
+  scroll-behavior: smooth; /* For auto-scrolling */
+  
+  /* Aesthetics */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  padding: 0 0 24px clamp(20px, 3vw, 40px);
+}
+
+/* 3-CARD VIEW LOGIC */
+/* The card width is calculated as a fraction of the viewport width (vw)
+   to ensure the correct number of cards are visually present on screen. */
+
+/* Default (Mobile): Show 1 card (85% width) */
+.reviews-carousel {
+  grid-auto-columns: 85vw;
+}
+
+/* Tablet/Small Desktop: Show 2 cards at once */
+@media (min-width: 600px) {
+  .reviews-carousel {
+    /* (100% / 2) - half the gap - a fixed buffer for scrollbar/extra padding */
+    grid-auto-columns: calc(50vw - (var(--carousel-gap) / 2) - 30px);
+  }
+}
+
+/* Large Desktop (The "Show 3" request): Show 3 cards at once */
+@media (min-width: 992px) {
+  .reviews-carousel {
+    /* (100% / 3) - two-thirds the gap - a fixed buffer for scrollbar/extra padding */
+    grid-auto-columns: calc(33.333vw - (var(--carousel-gap) * 2 / 3) - 30px);
+  }
+}
+
+/* Hide the scrollbar for Chrome/Safari */
+.reviews-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* CARD (WITH PREMIUM HOVER SETUP) */
+.review-card {
+  position: relative;
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, #1b1b1e, #151518) padding-box,
+    conic-gradient(from 180deg, rgba(242,196,206,.4), rgba(116,93,255,.36), rgba(255,171,202,.36), rgba(242,196,206,.4)) border-box;
+  border: 1px solid transparent;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeUp .6s cubic-bezier(.22,1,.36,1) forwards;
+  
+  /* CAROUSEL SETUP */
+  scroll-snap-align: start;
+  width: 100%;
+  
+  /* PREMIUM HOVER SETUP */
+  perspective: 1000px; /* Establishes a 3D scene */
+  transition: all 0.4s cubic-bezier(.25, .8, .25, 1); /* Smoother transition for all properties */
+}
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* VIDEO HOLDER - NOW LANDSCAPE (16:9) */
+.review-frame {
+  position: relative;
+  aspect-ratio: 16 / 9; /* LANDSCAPE */
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  
+  /* 3D Transform Preparation */
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease-out, box-shadow 0.6s ease;
+}
+
+/* Premium Hover Effect */
+@media (hover:hover) {
+  .review-card:hover {
+    transform: translateY(-10px) scale(1.015); /* Lift the whole card */
+    box-shadow: 0 25px 50px rgba(0,0,0,0.6); /* Deeper shadow */
+  }
+
+  .review-card:hover .review-frame {
+    /* Apply a subtle 3D tilt */
+    transform: rotateY(-2deg) rotateX(1deg) scale(1.01);
+  }
+}
+
+.review-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .001;
+  transition: opacity .35s ease, transform .65s ease;
+}
+.review-card.is-playing video {
+  opacity: 1;
+  transform: scale(1.01);
+}
+
+/* SOUND TAP + BADGE */
+.review-soundtap {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.review-badge {
+  position: absolute;
+  top: .55rem;
+  left: .55rem;
+  padding: .25rem .55rem;
+  border-radius: 999px;
+  font-size: .7rem;
+  background: rgba(0,0,0,.55);
+  border: 1px solid rgba(255,255,255,.18);
+  color: #fff;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
+/* META */
+.review-meta {
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.review-name { font-weight: 700; color: var(--color-light); }
+.review-rating { color: var(--color-accent); display: flex; gap: 6px; align-items: center; }
+.review-rating em { font-style: normal; font-size: .85rem; color: var(--color-light); opacity: .75; }
+
+/* ============================================================
+   LIGHT THEME — Apple Clean Minimal
+   ============================================================ */
+.home-page.light-theme .reviews-section {
+  background: var(--color-dark); /* pure white */
+  color: var(--color-light);
+}
+
+/* Headers */
+.home-page.light-theme .reviews-title {
+  color: var(--color-light) !important;
+}
+.home-page.light-theme .reviews-subtitle {
+  color: var(--color-accent) !important;
+}
+
+/* Review Card */
+.home-page.light-theme .review-card {
+  background: var(--color-mid);         /* soft Apple card surface */
+  border: 1px solid #E5E5E7;
+  box-shadow: var(--shadow-sm);
+}
+.home-page.light-theme .review-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Video Frame */
+.home-page.light-theme .review-frame {
+  background: #FFFFFF;
+  box-shadow: 0 6px 14px rgba(0,0,0,.06);
+}
+
+/* Badge */
+.home-page.light-theme .review-badge {
+  background: rgba(0,0,0,.06);
+  border: 1px solid rgba(0,0,0,.12);
+  color: #1C1C1E;
+}
+
+/* Meta Text */
+.home-page.light-theme .review-name {
+  color: #1C1C1E;
+}
+.home-page.light-theme .review-rating em {
+  color: #3A3A3C;
+}
