@@ -102,7 +102,7 @@ body { margin: 0; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Robo
 }
 
 .breadcrumb-nav { font-size: .95rem; color: var(--muted-2); }
-.breadcrumb-separator { margin: 0 .35rem; color: var(--muted-3); }
+.breadcrumb-separator { margin: 0 .35rem; color: #9b8b78; }
 .breadcrumb-link {
   color: var(--accent-strong);
   text-decoration: none;

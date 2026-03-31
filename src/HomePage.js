@@ -16,7 +16,7 @@ import logo2 from "../src/assets/DOR black.png"
 import { Helmet } from 'react-helmet-async';
 import CustomerReviewUpload from "./components/CustomerReviewUpload";
 import CustomerReviewsSection from "./components/CustomerReviewsSection";
-
+import Header from "./components/Header";
 import CollaborationSection from "./components/CollaborationSection";
 import EarnWithUsModal from "./components/EarnWithUsModal";
 const WhatsAppIcon = ({ size = 20 }) => (
@@ -370,130 +370,14 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
       {/* Header */}
 
-      <header className={`header ${scrolled ? 'scrolled' : ''}`}>
-  <div className="header-container">
-<a href="#" className="header-logo animate-pulse-custom">
-        <div className="logo-3d-container">
-          <img
-            src={theme === 'light' ? logo2 : logo1}
-            alt="Dress On Rent"
-            className="logo-image"
-          />
-        </div>
-      </a>
-    <div className="header-nav-wrapper">
-      <nav className="desktop-nav">
-        <a href="#men" className="nav-link group">
-          Men
-          <span className="nav-link-underline"></span>
-        </a>
-        <a href="#women" className="nav-link group">
-          Women
-          <span className="nav-link-underline"></span>
-        </a>
-        <a href="#stores-location" className="nav-link group">
-          Stores Location
-          <span className="nav-link-underline"></span>
-        </a>
-       <a 
-      href="#" 
-      onClick={(e) => {e.preventDefault(); setShowEarnModal(true);}} 
-      className="nav-link group"
-  >
-    Share Your Wardrobe
-    <span className="nav-link-underline"></span>
-  </a>
-        <a href="#contact" className="nav-link group">
-          Contact Us
-          <span className="nav-link-underline"></span>
-        </a>
-
-        <a href="/partner" className="nav-link group">
-          Franchise
-          <span className="nav-link-underline"></span>
-        </a>
-        <a href="/blog" className="nav-link group">
-  Blog
-  <span className="nav-link-underline"></span>
-</a>
-        
-        {/* NEW THEME TOGGLE BUTTON for Desktop */}
-        <button
-          onClick={toggleTheme}
-          className={`theme-toggle-button ${theme === 'light' ? 'light-mode' : 'dark-mode'}`}
-          aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-        >
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
-        {/* END NEW THEME TOGGLE BUTTON */}
-
-        <a href="#men" className="cta-button">
-          Rent Now
-          <ChevronRight size={18} className="icon-right" />
-        </a>
-      </nav>
-
-      {/* ✅ NEW: SOCIAL ICONS IN DESKTOP HEADER */}
-      
-
-      <button
-        className={`mobile-menu-button animate-slow-spin ${isMobileMenuOpen ? 'rotate-90' : ''}`}
-        onClick={toggleMobileMenu}
-        aria-expanded={isMobileMenuOpen}
-        aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
-      >
-        <Menu size={28} />
-      </button>
-    </div>
-  </div>
-
-  {isMobileMenuOpen && (
-    <nav className="mobile-nav">
-      <ul className="mobile-nav-list">
-        <li><a href="#men" className="mobile-nav-item" onClick={toggleMobileMenu}>Men's Collection</a></li>
-        <li><a href="#women" className="mobile-nav-item" onClick={toggleMobileMenu}>Women's Collection</a></li>
-        <li><a href="#stores-location" className="mobile-nav-item" onClick={toggleMobileMenu}>Our Stores Location</a></li>
-        <li><a href="#contact" className="mobile-nav-item" onClick={toggleMobileMenu}>Contact Us</a></li>
-        <li><a href="#franchise" className="mobile-nav-item" onClick={toggleMobileMenu}>Franchise Opportunities</a></li>
-        <li><a href="/blog" className="mobile-nav-item" onClick={toggleMobileMenu}>Blog</a></li>
-
-<li>
-            <button
-                onClick={() => {
-                    setShowEarnModal(true);
-                    toggleMobileMenu(); // Close mobile menu after opening modal
-                }}
-                className="mobile-nav-item"
-                style={{ color: 'var(--color-accent)', fontWeight: 'bold', background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
-            >
-                Earn with Us
-            </button>
-        </li>
-        {/* NEW THEME TOGGLE BUTTON for Mobile */}
-        <li>
-          <button
-            onClick={toggleTheme}
-            className="mobile-nav-item theme-toggle-mobile"
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            {theme === 'dark' ? <Sun size={18} className="mr-2" /> : <Moon size={18} className="mr-2" />}
-            Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode
-          </button>
-        </li>
-        {/* END NEW THEME TOGGLE BUTTON */}
-
-        <li>
-          <a href="#men" className="mobile-nav-item" onClick={toggleMobileMenu} style={{ color: '#db2777', fontWeight: 'bold' }}>
-            Rent Now
-          </a>
-        </li>
-
-        {/* ✅ NEW MOBILE SOCIAL ICONS */}
-        
-      </ul>
-    </nav>
-  )}
-</header>
+      <Header
+  theme={theme}
+  toggleTheme={toggleTheme}
+  scrolled={scrolled}
+  isMobileMenuOpen={isMobileMenuOpen}
+  toggleMobileMenu={toggleMobileMenu}
+  setShowEarnModal={setShowEarnModal}
+/>
 {/* LEFT STICKY SOCIAL BAR */}
 <div className="left-social-bar">
   <a href="https://www.instagram.com/dor_designer?igsh=MWp4dmgyMWdibnMxcw==" target="_blank">

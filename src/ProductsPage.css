@@ -29,7 +29,7 @@
 .products-page, .products-header, .product-card{ animation:fadeUp .8s ease both; }
 
 /* -------- Header (frosted glass) -------- */
-.products-header{ display:flex; justify-content:center; margin:0 auto 40px; }
+.products-header{ display:flex; justify-content:center; margin:0 auto 40px; margin-top: 10px; }
 .products-header-content{
   background: rgba(255,255,255,.06);
   border:1px solid rgba(255,255,255,.2);
@@ -56,7 +56,11 @@
 .products-breadcrumb{ margin-top:12px; opacity:.9; }
 .breadcrumb-link{ color:#fff; text-decoration:none; border-bottom:1px dashed rgba(255,255,255,.25) }
 .breadcrumb-link:hover{ opacity:.9 }
-.breadcrumb-separator{ opacity:.6 }
+.breadcrumb-separator {
+  font-weight: 600;
+  color: #9b8b78;
+  margin: 0 6px;
+}
 
 /* -------- Filter bar -------- */
 .filter-bar-wrapper{ width:min(1200px, 94vw); margin:0 auto 18px; }

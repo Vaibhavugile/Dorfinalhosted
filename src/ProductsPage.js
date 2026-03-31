@@ -4,7 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import './ProductsPage.css'; // Make sure this path is correct
 import { db } from './firebaseConfig'; // Your initialized Firestore instance
 import { collection, query, where, getDocs, orderBy as firebaseOrderBy } from 'firebase/firestore';
-
+import Header from "./components/Header";
 // Import icons from lucide-react
 import { Filter, ListFilter, IndianRupee, ShoppingCart, Loader2, XCircle, ShoppingBag, Clock } from 'lucide-react'; // Added Clock icon
 // ImageGallery component (paste above ProductsPage)
@@ -183,7 +183,22 @@ function ProductsPage() {
 
     // State for showing/hiding mobile filters
     const [showMobileFilters, setShowMobileFilters] = useState(false);
+const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const [scrolled, setScrolled] = useState(false);
+const [showEarnModal, setShowEarnModal] = useState(false);
 
+const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const toggleTheme = () => {
+    setTheme(currentTheme => {
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme); // Save the new theme choice
+      return newTheme;
+    });
+  };
+
+const toggleMobileMenu = () => {
+  setIsMobileMenuOpen(!isMobileMenuOpen);
+};
     // New states for dynamic filter options
     const [dynamicStores, setDynamicStores] = useState([]);
     const [dynamicColors, setDynamicColors] = useState([]);
@@ -338,19 +353,34 @@ const storedTheme = localStorage.getItem("theme") || "light";
 
     return (
         <div className={`products-page home-page ${storedTheme}-theme`}>
+            <Header
+  theme={theme}
+  toggleTheme={toggleTheme}
+  scrolled={scrolled}
+  isMobileMenuOpen={isMobileMenuOpen}
+  toggleMobileMenu={toggleMobileMenu}
+  setShowEarnModal={setShowEarnModal}
+/>
 
-            <header className="products-header">
-                <div className="products-header-content">
-                    <h1 className="products-title">{subcategoryName} Collection</h1>
-                    <p className="products-breadcrumb">
-                        <Link to="/" className="breadcrumb-link">Home</Link>
-                        <span className="breadcrumb-separator"> / </span>
-                        <Link to={`/collection/${gender}`} className="breadcrumb-link">{gender === 'men' ? 'Men' : 'Women'}</Link>
-                        <span className="breadcrumb-separator"> / </span>
-                        {subcategoryName}
-                    </p>
-                </div>
-            </header>
+          <header className="products-header">
+  <div className="products-header-content">
+    <h1 className="products-title">{subcategoryName} Collection</h1>
+
+    <p className="products-breadcrumb">
+      <Link to="/" className="breadcrumb-link">Home</Link>
+
+      <span className="breadcrumb-separator"> &gt; </span>
+
+      <Link to={`/collection/${gender}`} className="breadcrumb-link">
+        {gender === 'men' ? 'Men' : 'Women'}
+      </Link>
+
+      <span className="breadcrumb-separator"> &gt; </span>
+
+      {subcategoryName}
+    </p>
+  </div>
+</header>
 
             {/* Horizontal Filter Bar */}
             <div className="filter-bar-wrapper">
