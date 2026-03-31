@@ -22,7 +22,7 @@ const EarnWithUsModal = ({ showEarnModal, setShowEarnModal, theme }) => {
                 onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
             >
                 <button
-                    className="modal7-close-button"
+                    className="modal7-close-buttons"
                     onClick={() => setShowEarnModal(false)}
                     aria-label="Close Earn with Us Modal"
                 >
@@ -71,12 +71,21 @@ const EarnWithUsModal = ({ showEarnModal, setShowEarnModal, theme }) => {
                     </div>
                 </div>
 
-                <button
-                    className="btn btn-primary mt-6 w-full"
-                    onClick={() => setShowEarnModal(false)}
-                >
-                    Understood, Let's Connect!
-                </button>
+               <button
+  className="btn btn-primary mt-6 w-full"
+  onClick={() => {
+    setShowEarnModal(false);
+
+    const phone = "918698797007"; // your WhatsApp number
+    const message = encodeURIComponent(
+      "Hi DOR Team, I want to participate in the Wardrobe Credit Program and give my outfits."
+    );
+
+    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
+  }}
+>
+  Understood, Let's Connect!
+</button>
             </div>
         </div>
     );
