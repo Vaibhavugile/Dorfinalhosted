@@ -193,7 +193,7 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
         const storesCollectionRef = collection(db, 'filterOptions', 'stores', 'list');
         const storeSnapshot = await getDocs(storesCollectionRef);
         // Assuming each store document has a 'name' field and potentially an 'image' field
-        const fetchedStores = storeSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id,Address: doc.data().Address ||'', image: doc.data().imageUrl || `https://placehold.co/1200x600/404040/e0e0e0?text=${doc.id.replace(/\s/g, '+')}` }))   .sort((a, b) => b.name.localeCompare(a.name));
+        const fetchedStores = storeSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id,Address: doc.data().Address ||'',mapsDest: doc.data().mapsDest ||'',Addresses: doc.data().Addresses ||'', image: doc.data().imageUrl || `https://placehold.co/1200x600/404040/e0e0e0?text=${doc.id.replace(/\s/g, '+')}` }))   .sort((a, b) => b.name.localeCompare(a.name));
         setStoreLocations(fetchedStores);
         console.log(storeLocations)
       } catch (error) {
@@ -341,22 +341,13 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
                    <span className="modal7-button-text">
   {store.name}
   {store.Address && ` / ${store.Address}`}
+  {store.Addresses && `(${store.Addresses})`}
 </span>
 
                   </button>
                   
                 ))}
-                <button
-                    className="btn btn-primary modal7-store-button"
-                    onClick={() => {
-                      
-                    }}
-                  >
-                    
-                  <span className="modal7-button-text">Mumbai (Coming Soon)</span>
-
-                  </button>
-
+               
               </div>
             )}
           </div>
@@ -437,24 +428,33 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
     ) : storeLocations.length === 0 ? (
       <p className="message-container no-products">No store locations found.</p>
     ) : (
-      <div className="grid-3-col">
-        {storeLocations.map((store) => (
-          
-          <div key={store.id} className="store-card">
-            <img
-              src={store.image || ""}
-              alt={`DOR Dress On Rent store location in ${store.name} for gown and suit rentals, including options for ${store.name.includes('Pune') ? 'Pimpri Chinchwad, Kothrud' : 'Deolali, Wardha Road'}`}
-              className="store-card-image"
-              loading="lazy"
-              onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/400x300/cccccc/333333?text=DOR ${store.name} Store`; }}
-            />
-            {/* H3 tag is appropriate for individual store names */}
-            <h3 className="card-title">{store.name} Store</h3>
-            {/* If store.address is available, you might consider adding it here as well for local SEO */}
-            {store.Address && <p className="store-address">{store.Address}</p>}
-          </div>
-        ))}
-      </div>
+    <div className="grid-3-col">
+  {storeLocations.map((store) => (
+    <div
+      key={store.id}
+      className="store-card"
+      onClick={() => window.open(store.mapsDest, "_blank")}
+      style={{ cursor: "pointer" }}
+    >
+      <img
+        src={store.image || ""}
+        alt={`DOR Dress On Rent store location in ${store.name}`}
+        className="store-card-image"
+        loading="lazy"
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = `https://placehold.co/400x300/cccccc/333333?text=DOR ${store.name} Store`;
+        }}
+      />
+
+      <h3 className="card-title">
+        {store.name}
+        {store.Address && ` / ${store.Address}`} Store
+        {store.Addresses && ` (${store.Addresses})`}
+      </h3>
+    </div>
+  ))}
+</div>
     )}
   </div>
 </section>

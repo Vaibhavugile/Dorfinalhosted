@@ -4,7 +4,8 @@ import './ProductDetailPage.css';
 import { db } from './firebaseConfig';
 import { doc, getDoc, collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { IndianRupee, MessageSquare, Info, CheckCircle, XCircle, Loader2, ChevronLeft, ChevronRight, Ruler, Palette, ZoomIn, ZoomOut, Maximize2, MapPin, Clock } from 'lucide-react';
-
+import Header from "./components/Header";
+import EarnWithUsModal from './components/EarnWithUsModal';
 function ProductDetailPage() {
     const storedTheme = localStorage.getItem('theme') || 'light';
 
@@ -19,7 +20,21 @@ function ProductDetailPage() {
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [displayImages, setDisplayImages] = useState([]); // State for combined images
+const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const [scrolled, setScrolled] = useState(false);
+const [showEarnModal, setShowEarnModal] = useState(false);
 
+const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const toggleTheme = () => {
+    setTheme(currentTheme => {
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme); // Save the new theme choice
+      return newTheme;
+    });
+  };
+const toggleMobileMenu = () => {
+  setIsMobileMenuOpen(!isMobileMenuOpen);
+};
     const [showModal, setShowModal] = useState(false); // For inquiry/error modal
     const [modalMessage, setModalMessage] = useState('');
     const [modalType, setModalType] = useState('');
@@ -390,15 +405,27 @@ function ProductDetailPage() {
 
     return (
         <div className={`product-detail-page home-page ${storedTheme}-theme new-layout`}>
-
+            <EarnWithUsModal
+                      showEarnModal={showEarnModal}
+                      setShowEarnModal={setShowEarnModal}
+                      theme={theme}
+                  />
+<Header
+  theme={theme}
+  toggleTheme={toggleTheme}
+  scrolled={scrolled}
+  isMobileMenuOpen={isMobileMenuOpen}
+  toggleMobileMenu={toggleMobileMenu}
+  setShowEarnModal={setShowEarnModal}
+/>
             <header className="page-header-section">
                 <div className="container">
                     <p className="breadcrumb-nav">
-                        <Link to="/" className="breadcrumb-link">Home</Link>
-                        <span className="breadcrumb-separator"> / </span>
-                        <Link to={`/#${gender}`} className="breadcrumb-link">{gender === 'men' ? 'Men' : 'Women'}</Link>
-                        <span className="breadcrumb-separator"> / </span>
-                        <Link to={`/collection/${gender}/${subcategoryName}`} className="breadcrumb-link">{subcategoryName}</Link>
+                        <Link to="/" className="breadcrumb-link1">Home</Link>
+                        <span className="breadcrumb-separator1"> / </span>
+                        <Link to={`/#${gender}`} className="breadcrumb-link1">{gender === 'men' ? 'Men' : 'Women'}</Link>
+                        <span className="breadcrumb-separator1"> / </span>
+                        <Link to={`/collection/${gender}/${subcategoryName}`} className="breadcrumb-link1">{subcategoryName}</Link>
                     </p>
                     <h1 className="product-main-title">{product.name}</h1>
                 </div>
@@ -458,9 +485,9 @@ function ProductDetailPage() {
                     <div className="product-price-block">
                         <span className="rent-price-large"><IndianRupee size={30} className="inline-icon" />{product.rent.toLocaleString('en-IN')}</span> <span className="price-term">for 3 days</span>
 
-                        {product.originalPrice && (
+                        {/* {product.originalPrice && (
                             <span className="original-price-strike">M.R.P: <IndianRupee size={20} className="inline-icon" />{product.originalPrice.toLocaleString('en-IN')}</span>
-                        )}
+                        )} */}
                     </div>
 
                     {/* <div className="product-description-block animate-fade-in-up">
@@ -487,7 +514,7 @@ function ProductDetailPage() {
                                     <option value="">No sizes available</option>
                                 )}
                             </select>
-                            <a href="#" className="size-chart-link" onClick={(e) => e.preventDefault()}>Size Chart</a>
+                            {/* <a href="#" className="size-chart-link" onClick={(e) => e.preventDefault()}>Size Chart</a> */}
                         </div>
 
                         {product.colors && product.colors.length > 1 && (
@@ -512,7 +539,10 @@ function ProductDetailPage() {
                                 <Palette size={20} className="icon-mr" />Available Color: <strong>{product.color}</strong>
                             </p>
                         )}
+                                                    <li><strong>Available at:</strong> {product.availableStores ? product.availableStores.join(', ') : 'Check in-store'}</li>
+
                     </div>
+
 
 
 
@@ -532,11 +562,11 @@ function ProductDetailPage() {
                     )}
 
                     <div className="additional-info-block">
-                        <h3 className="section-heading">Product Specifications:</h3>
+                        {/* <h3 className="section-heading">Product Specifications:</h3> */}
                         <ul>
                             {/* <li><strong>Material:</strong> {product.material || 'Not specified'}</li> */}
                             {/* <li><strong>Care Instructions:</strong> {product.careInstructions || 'Dry clean only'}</li> */}
-                            <li><strong>Available at:</strong> {product.availableStores ? product.availableStores.join(', ') : 'Check in-store'}</li>
+                            {/* <li><strong>Available at:</strong> {product.availableStores ? product.availableStores.join(', ') : 'Check in-store'}</li> */}
                         </ul>
                     </div>
                 </div>

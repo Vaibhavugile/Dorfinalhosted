@@ -5,6 +5,7 @@ import './ProductsPage.css'; // Make sure this path is correct
 import { db } from './firebaseConfig'; // Your initialized Firestore instance
 import { collection, query, where, getDocs, orderBy as firebaseOrderBy } from 'firebase/firestore';
 import Header from "./components/Header";
+import EarnWithUsModal from './components/EarnWithUsModal';
 // Import icons from lucide-react
 import { Filter, ListFilter, IndianRupee, ShoppingCart, Loader2, XCircle, ShoppingBag, Clock } from 'lucide-react'; // Added Clock icon
 // ImageGallery component (paste above ProductsPage)
@@ -353,6 +354,11 @@ const storedTheme = localStorage.getItem("theme") || "light";
 
     return (
         <div className={`products-page home-page ${storedTheme}-theme`}>
+            <EarnWithUsModal
+                      showEarnModal={showEarnModal}
+                      setShowEarnModal={setShowEarnModal}
+                      theme={theme}
+                  />
             <Header
   theme={theme}
   toggleTheme={toggleTheme}

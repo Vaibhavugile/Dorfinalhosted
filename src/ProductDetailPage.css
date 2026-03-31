@@ -72,7 +72,6 @@ body { margin: 0; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Robo
   background-color: var(--color-mid);
   color: var(--color-light);
   font-family: 'Cinzel', serif !important;
-  padding-top: 64px;
   overflow-x: hidden;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -92,7 +91,7 @@ body { margin: 0; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Robo
 /* -------- Header / Breadcrumbs -------- */
 .page-header-section {
   position: sticky;
-  top: 0;
+  top: 20px;
   z-index: 30;
   background: rgba(35,34,38,.65);
   backdrop-filter: blur(8px);
@@ -145,7 +144,8 @@ body { margin: 0; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Robo
 .main-image-display {
   position: relative;
   width: 100%;
-  padding-bottom: 120%;
+  margin-top: 30px;
+  padding-bottom: 100%;
   overflow: hidden;
   border-radius: var(--radius-md);
   background: var(--panel);
@@ -228,6 +228,7 @@ body { margin: 0; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Robo
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   color: var(--color-light);
+  margin-top: 30px;
   padding: 32px;
   transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
@@ -565,7 +566,7 @@ body::after{
   color:#1C1C1E;
 }
 .home-page.light-theme .page-header-section{
-  background: #FFFFFFCC;
+  background: #997860;
   border-bottom:1px solid #E5E5E7;
   box-shadow: 0 2px 8px rgba(0,0,0,.05);
   backdrop-filter: blur(12px);
@@ -661,7 +662,10 @@ body::after{
 .home-page.light-theme .react-datepicker__day--selected{ background-color: var(--color-accent) !important; color:#111 !important; }
 /* ---------------- FIX LIGHT THEME TEXT COLORS ---------------- */
 
-.home-page.light-theme .product-main-title,
+.home-page.light-theme .product-main-title {
+   color: #F7F7F8 !important; /* solid black */
+ 
+}
 .home-page.light-theme .product-secondary-title,
 .home-page.light-theme .price-term,
 .home-page.light-theme .product-description-block p,
@@ -671,7 +675,7 @@ body::after{
 .home-page.light-theme .product-details-column,
 .home-page.light-theme .related-product-name,
 .home-page.light-theme .additional-info-block li {
-  color: #1a1a1a !important; /* solid black */
+  color: #997860 !important; /* solid black */
 }
 
 /* Price and labels */
@@ -685,10 +689,11 @@ body::after{
 }
 
 /* Breadcrumb & menu text */
-.home-page.light-theme .breadcrumb-link {
-  color: #4a4a4a !important;
+.home-page.light-theme .breadcrumb-link1 {
+  color:#F7F7F8!important;
 }
 
-.home-page.light-theme .breadcrumb-link:hover {
-  color: var(--color-accent) !important;
+.home-page.light-theme .breadcrumb-link1:hover {
+  color: #F7F7F8!important;
 }
+.breadcrumb-separator1 { margin: 0 .35rem; color: #F7F7F8; }

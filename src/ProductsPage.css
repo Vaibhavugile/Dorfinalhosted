@@ -115,12 +115,12 @@
   background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15);
   border-radius:14px; color:#fff; text-align:center;
 }
-.message-container.loading .spin{ animation: spin 1s linear infinite }
+.message-container.loading .spin{ animation: spin 1s linear infinite ;color:#997860 }
 @keyframes spin{ to{ transform: rotate(360deg) } }
 .message-container.error{ border-color: rgba(231,76,60,.4); background: rgba(231,76,60,.15); }
-.no-products-icon{ opacity:.85 }
-.no-products-title{ font-weight:800; font-size:1.2rem }
-.no-products-text{ opacity:.9 }
+.no-products-icon{ opacity:.85;color:#997860 }
+.no-products-title{ font-weight:800; font-size:1.2rem;color:#997860 }
+.no-products-text{ opacity:.9 ;color:#997860}
 
 /* -------- Grid + visibility limits -------- */
 /* MOBILE — 2 × 2 grid, show only first 4 items */
@@ -211,7 +211,7 @@
 
 /* -------- Product info -------- */
 .product-info{ padding:12px 14px 16px; }
-.product-name{ font-weight:800; font-size:1.05rem; letter-spacing:-.01em; color:#fff; }
+.product-name{ font-weight:600; font-size:1.05rem; letter-spacing:-.01em; color:#fff; }
 .product-color{ margin-top:4px; opacity:.9 }
 .product-rent{ margin-top:8px; font-weight:800; color:#fff; }
 .inline-icon{ vertical-align:-2px; margin-right:4px; opacity:.95 }
@@ -260,11 +260,11 @@
 
 /* Light Product Cards */
 .home-page.light-theme .product-card {
-  background:#FFFFFF;
+  background:#997860;
   border:1px solid #DCDCDC;
   box-shadow:0 8px 20px rgba(0,0,0,0.06);
   border-radius:18px;
-  color:#1C1C1E;
+  color:#FFFFFF;
 }
 .home-page.light-theme .product-card:hover {
   box-shadow:0 14px 32px rgba(0,0,0,0.12);
@@ -280,9 +280,9 @@
 
 /* Light Product Text */
 .home-page.light-theme .product-name,
-.home-page.light-theme .product-rent { color:#1C1C1E; }
+.home-page.light-theme .product-rent { color:#F7F7F7; }
 .home-page.light-theme .product-color,
-.home-page.light-theme .rent-per-day { color:#6F6F6F; }
+.home-page.light-theme .rent-per-day { color:#F7F7F7; }
 
 /* Light Lightbox */
 .home-page.light-theme .ig-lightbox-inner {
