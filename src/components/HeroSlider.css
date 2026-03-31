@@ -27,7 +27,7 @@
   /* reduced scale to avoid blur */
   transform: scale(1.05);
 
-  transition: opacity 1.2s ease, transform 10s ease;
+ transition: opacity 1.5s ease, transform 16s ease;
 
   will-change: transform, opacity;
   backface-visibility: hidden;
@@ -206,13 +206,13 @@
 }
 
 .hero-slide.active .animate {
-  animation: staggerFade 0.9s ease forwards;
+  animation: staggerFade 1.4s cubic-bezier(.16,1,.3,1) forwards;
 }
 
-.hero-slide.active .animate-1 { animation-delay: 0.2s; }
-.hero-slide.active .animate-2 { animation-delay: 0.5s; }
-.hero-slide.active .animate-3 { animation-delay: 0.8s; }
-.hero-slide.active .animate-4 { animation-delay: 1.1s; }
+.hero-slide.active .animate-1 { animation-delay: 0.4s; }
+.hero-slide.active .animate-2 { animation-delay: 0.8s; }
+.hero-slide.active .animate-3 { animation-delay: 1.2s; }
+.hero-slide.active .animate-4 { animation-delay: 1.6s; }
 
 @keyframes staggerFade {
   0% {

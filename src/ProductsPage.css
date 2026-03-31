@@ -6,7 +6,7 @@
   --color-mid:#4F4F51;
   --color-light:#EDEDED;
  
-  --color-accent:#C9A66B; /* Luxury Gold */
+  --color-accent:#s997860; /* Luxury Gold */
   --color-soft:#D9B78C; 
 }
 
@@ -250,8 +250,8 @@
 .home-page.light-theme .mobile-filter-toggle,
 .home-page.light-theme .clear-filters-btn,
 .home-page.light-theme .clear-filters-btn-overlay {
-  background: var(--color-accent);
-  color: #1C1C1E;
+  background: #997860;
+  color: #FFFFFF;
 }
 
 /* Light Product Cards */

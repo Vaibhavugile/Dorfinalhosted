@@ -407,7 +407,7 @@ address.address-text { font-style: normal; }
 .home-page.light-theme .hero-ultimate-button-women,
 .home-page.light-theme .modal-store-button { 
   background-color: #997860; 
-  color:#1C1C1E; 
+  color:#ffffff; 
 }
 .home-page.light-theme .btn:hover,
 .home-page.light-theme .btn-primary:hover,
@@ -441,7 +441,7 @@ address.address-text { font-style: normal; }
   background: #997860 !important; 
   border:1px solid #DCDCDC; 
   box-shadow: 0 6px 18px rgba(0,0,0,0.06); 
-  color: #1C1C1E; 
+  color: #ffffff; 
   border-radius: 18px;
 }
 .home-page.light-theme .category-card:hover { 

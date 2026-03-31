@@ -15,8 +15,8 @@
   --color-light: #D6D6D6;         /* primary text on dark */
 
   /* Gold accents to match Home/Products */
-  --color-accent: #C9A66B;        /* Luxury Gold */
-  --color-soft:   #D9B78C;        /* Hover Gold Shade */
+  --color-accent: #997860;        /* Luxury Gold */
+  --color-soft:   #997860;        /* Hover Gold Shade */
 
   /* Back-compat for previous selectors */
   --accent-strong: var(--color-accent);
@@ -245,7 +245,7 @@ body { margin: 0; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Robo
   display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
   padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,.12);
 }
-.rent-price-large { font-size: 2.25rem; font-weight: 800; color: var(--accent-strong); display: flex; align-items: center; }
+.rent-price-large { font-size: 2.25rem; font-weight: 800; color: #997860; display: flex; align-items: center; }
 .rent-price-large .inline-icon { margin-right: 6px; }
 .price-term { font-size: 1.05rem; color: var(--muted-1); font-weight: 600; transform: translateY(2px); letter-spacing: .02em; }
 .original-price-strike { font-size: 1rem; color: rgba(214,214,214,.75); text-decoration: line-through; display: flex; align-items: center; }
@@ -596,8 +596,8 @@ body::after{
 }
 
 /* Price + buttons */
-.home-page.light-theme .rent-price-large{ color: var(--color-accent) !important; text-shadow:none; }
-.home-page.light-theme .original-price-strike{ color: #6F6F6F; }
+.home-page.light-theme .rent-price-large{ color: #997860!important; text-shadow:none; }
+.home-page.light-theme .original-price-strike{ color: #997860; }
 .home-page.light-theme .btn,
 .home-page.light-theme .check-button,
 .home-page.light-theme .enquire-button,
@@ -613,7 +613,7 @@ body::after{
 .home-page.light-theme .zoom-button:hover,
 .home-page.light-theme .reset-zoom-button:hover,
 .home-page.light-theme .modal-ok-button:hover{
-  background-color: #F0DED3;
+  background-color: #997860;
   box-shadow: 0 12px 28px rgba(0,0,0,0.10) !important;
 }
 
@@ -643,7 +643,7 @@ body::after{
   color:#1C1C1E;
 }
 .home-page.light-theme .related-product-price{
-  color: var(--color-accent);
+  color: #997860;
 }
 
 /* Datepicker tweak */
@@ -676,7 +676,7 @@ body::after{
 
 /* Price and labels */
 .home-page.light-theme .rent-price-large {
-  color: var(--color-accent) !important;
+  color: #997860 !important;
   text-shadow: none !important;
 }
 

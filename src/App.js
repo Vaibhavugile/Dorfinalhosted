@@ -18,6 +18,7 @@ import BlogsPage from "./pages/BlogsPage";
 import { BlogDetails } from "./pages/BlogDetails";
 import { AddEditBlog } from "./pages/AddEditBlog";
 import AddProductPage from './AddProductPage';
+import PartnershipPage from './pages/PartnershipPage';
 function App() {
   return (
     <Router>
@@ -40,6 +41,8 @@ function App() {
           <Route path="/admin/products" element={<AdminProductsManager />} />
          <Route path="/admin/add-product" element={<AddProductPage />} />
         <Route path="/blog" element={<BlogsPage/>} />
+                <Route path="/partner" element={<PartnershipPage/>} />
+
         <Route path="/blog/new" element={<AddEditBlog/>} />
         <Route path="/blog/:slug" element={<BlogDetails/>} />
           {/* 404 Fallback */}

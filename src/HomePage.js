@@ -193,7 +193,7 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
         const storesCollectionRef = collection(db, 'filterOptions', 'stores', 'list');
         const storeSnapshot = await getDocs(storesCollectionRef);
         // Assuming each store document has a 'name' field and potentially an 'image' field
-        const fetchedStores = storeSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id,Address: doc.data().Address ||'', image: doc.data().imageUrl || `https://placehold.co/1200x600/404040/e0e0e0?text=${doc.id.replace(/\s/g, '+')}` }));
+        const fetchedStores = storeSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id,Address: doc.data().Address ||'', image: doc.data().imageUrl || `https://placehold.co/1200x600/404040/e0e0e0?text=${doc.id.replace(/\s/g, '+')}` }))   .sort((a, b) => b.name.localeCompare(a.name));
         setStoreLocations(fetchedStores);
         console.log(storeLocations)
       } catch (error) {
@@ -338,7 +338,10 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
                     }}
                   >
                     
-                    <span className="modal7-button-text">{store.name}  {store.Address}</span>
+                   <span className="modal7-button-text">
+  {store.name}
+  {store.Address && ` / ${store.Address}`}
+</span>
 
                   </button>
                   
@@ -397,7 +400,7 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
       onClick={(e) => {e.preventDefault(); setShowEarnModal(true);}} 
       className="nav-link group"
   >
-    Earn With Us
+    Share Your Wardrobe
     <span className="nav-link-underline"></span>
   </a>
         <a href="#contact" className="nav-link group">
@@ -405,7 +408,7 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
           <span className="nav-link-underline"></span>
         </a>
 
-        <a href="#franchise" className="nav-link group">
+        <a href="/partner" className="nav-link group">
           Franchise
           <span className="nav-link-underline"></span>
         </a>
@@ -539,7 +542,7 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   className={`section collab-collection ${storesIsVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-8'}`}>
   <div className="container text-center">
     {/* H2 tag is already well-placed for section title */}
-    <h2 className="section-title">DOR Dress On Rent Stores in Pune & Nagpur</h2>
+    <h2 className="section-title">DOR Dress On Rent Stores</h2>
     {loadingStores ? (
       <div className="message-container loading">
         <Loader2 size={48} className="animate-spin text-blue-500" />
