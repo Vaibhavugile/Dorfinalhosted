@@ -8,10 +8,13 @@ export default function CollaborationSection({
   sectionTitle = "Collaboration",
   sectionSubtitle = "Our favorite creator moments ✦",
   videos = [
+    { src: "/video1.mp4", ig: "https://www.instagram.com/reel/CtswhecNsFf/?igsh=MWFqOXlneGhkdnUzMg==" },
     { src: "/Video-682.mp4", ig: "https://www.instagram.com/reel/DPjEUKmDOsj/?igsh=eXlyejRoZHE1ODlk" },
     { src: "/Video-369.mp4", ig: "https://www.instagram.com/reel/DPgJ3BIjd5J/?igsh=cXV0eDZpdDlqZWNr" },
-    { src: "/Video-949.mp4", ig: "https://www.instagram.com/reel/DNbdZDqsCyW/?igsh=ZHM3N2F1cnFmNHYw" },
     { src: "/Video-520.mp4", ig: "https://www.instagram.com/reel/DNQwKm3CPeW/?igsh=MTJwN2w2d3hrem84NQ%3D%3D" },
+    { src: "/video3.mp4", ig: "https://www.instagram.com/reel/DWWglhaEaWT/?igsh=MWR1MWszZ3VlZmhmYQ==" },
+    { src: "/video4.mp4", ig: "https://www.instagram.com/reel/DWNeaXIFfOB/?igsh=N2Jqdmw0YmdldGMw" },
+
   ],
   threshold = 0.35, // % visible before play
 }) {
