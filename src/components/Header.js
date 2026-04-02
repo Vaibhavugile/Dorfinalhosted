@@ -159,35 +159,25 @@ function Header({
               </li>
 
               <li>
-                <button
+                <Link
                   onClick={() => {
                     setShowEarnModal(true);
                     toggleMobileMenu();
                   }}
                   className="mobile-nav-item"
                 >
-                  Earn with Us
-                </button>
+                  Share Your Wardrobe
+                </Link>
               </li>
 
-              <li>
-                <button
-                  onClick={toggleTheme}
-                  className="mobile-nav-item theme-toggle-mobile"
-                >
-                  {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-                  Switch to {theme === "dark" ? "Light" : "Dark"} Mode
-                </button>
-              </li>
+              
 
               <li>
                 <Link
-                  to="/#men"
+                  to="/partner"
                   className="mobile-nav-item"
-                  onClick={toggleMobileMenu}
-                  style={{ color: "#db2777", fontWeight: "bold" }}
                 >
-                  Rent Now
+                  Franchise
                 </Link>
               </li>
 

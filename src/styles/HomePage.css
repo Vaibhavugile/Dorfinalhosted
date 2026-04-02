@@ -483,8 +483,8 @@ address.address-text { font-style: normal; }
    =========================== */
 .left-social-bar {
   position: fixed;
-  top: 50%;
-  left: 24px;
+  bottom: 4%;
+  right: 24px;
   transform: translateY(-50%);
   z-index: 9999;
   display: flex;
@@ -646,3 +646,4 @@ address.address-text { font-style: normal; }
 }
 /* NOTE: Hover styles (Step 4 from previous code) have been removed entirely 
    to ensure the continuous animation never stops. */
+   

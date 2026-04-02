@@ -298,3 +298,31 @@
   background: rgba(0,0,0,.08);
   color:#1C1C1E;
 }
+/* MOBILE FIX */
+@media (max-width: 480px){
+
+  .products-header-content{
+    padding:16px 14px;
+    border-radius:14px;
+  }
+
+  .products-title{
+    font-size:20px;
+    margin-bottom:4px;
+  }
+
+  .products-breadcrumb{
+    font-size:13px;
+    margin-top:4px;
+  }
+
+  .products-header{
+    margin-bottom:14px;
+  }
+
+}
+@media (max-width: 480px) {
+  .products-title::after {
+    display: none;
+  }
+}

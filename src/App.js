@@ -19,6 +19,8 @@ import { BlogDetails } from "./pages/BlogDetails";
 import { AddEditBlog } from "./pages/AddEditBlog";
 import AddProductPage from './AddProductPage';
 import PartnershipPage from './pages/PartnershipPage';
+import TermsConditions from "./pages/TermsConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 function App() {
   return (
     <Router>
@@ -42,7 +44,8 @@ function App() {
          <Route path="/admin/add-product" element={<AddProductPage />} />
         <Route path="/blog" element={<BlogsPage/>} />
                 <Route path="/partner" element={<PartnershipPage/>} />
-
+<Route path="/terms" element={<TermsConditions />} />
+<Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/blog/new" element={<AddEditBlog/>} />
         <Route path="/blog/:slug" element={<BlogDetails/>} />
           {/* 404 Fallback */}

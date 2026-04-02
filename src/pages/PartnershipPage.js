@@ -1,9 +1,35 @@
 import React from "react";
+import  { useState, useEffect,useRef} from 'react';
+
 import "./PartnershipPage.css";
+import Header from "../components/Header";
 
 function PartnershipPage() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [showEarnModal, setShowEarnModal] = useState(false);
+  
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+    const toggleTheme = () => {
+      setTheme(currentTheme => {
+        const newTheme = currentTheme === 'dark' ? 'light' : 'light';
+        localStorage.setItem('theme', newTheme); // Save the new theme choice
+        return newTheme;
+      });
+    };
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
   return (
     <div className="dor-partner-page">
+      <Header
+        theme={theme}
+        toggleTheme={toggleTheme}
+        scrolled={scrolled}
+        isMobileMenuOpen={isMobileMenuOpen}
+        toggleMobileMenu={toggleMobileMenu}
+        setShowEarnModal={setShowEarnModal}
+      />
 
       {/* HERO */}
       <section className="dor-partner-hero">
@@ -22,83 +48,79 @@ function PartnershipPage() {
           </h3>
 
           <p className="dor-hero-description">
-            Since 2018, we have built a successful and profitable model in the
-            outfit rental industry. With a strong foundation and growing demand,
-            we are now expanding across Pan India — looking for the right
+            Since 2018, we have built a successful outfit rental model.
+            Now we are expanding across India and looking for the right
             partners to grow with us.
           </p>
 
-          <button className="dor-partner-btn dor-hero-btn">
-            Become a Partner
-          </button>
+          <a
+  href="https://wa.me/919764767007?text=Hi%20Dress%20On%20Rent%20Team,%20I%20am%20interested%20in%20becoming%20a%20franchise%20partner."
+  target="_blank"
+  rel="noopener noreferrer"
+  className="dor-partner-btn"
+>
+  Become a Partner
+</a>
 
         </div>
 
       </section>
 
 
-      {/* WHY PARTNER */}
-      <section className="dor-partner-section">
-
-        <h2 className="dor-section-title">
-          Why Partner With Us?
-        </h2>
-
-        <p className="dor-section-subtitle">
-          We don’t just offer a franchise — we build and run the business with you.
-        </p>
-
-        <div className="dor-partner-grid">
-
-          <div className="dor-partner-card">
-            <h4>Digital Marketing</h4>
-            <p>Complete marketing campaigns handled by our team.</p>
-          </div>
-
-          <div className="dor-partner-card">
-            <h4>Customer Handling & PR</h4>
-            <p>Professional brand communication and support.</p>
-          </div>
-
-          <div className="dor-partner-card">
-            <h4>Customer Calls & Inquiries</h4>
-            <p>We manage customer inquiries while you focus on operations.</p>
-          </div>
-
-          <div className="dor-partner-card">
-            <h4>Promotions & Brand Building</h4>
-            <p>Continuous campaigns to grow your showroom visibility.</p>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      {/* WHAT YOU GET */}
+      {/* PARTNERSHIP OVERVIEW */}
       <section className="dor-partner-section dor-section-light">
 
         <h2 className="dor-section-title">
-          What You Get
+          Partnership Overview
         </h2>
 
-        <div className="dor-benefits-grid">
+        <p className="dor-section-subtitle">
+          Everything you need to start and grow your fashion rental business.
+        </p>
 
-          <div className="dor-benefit-card">
-            Complete Outfit Inventory
+        <div className="dor-partner-overview">
+
+          {/* WHY PARTNER */}
+          <div className="dor-overview-card">
+
+            <h3>Why Partner</h3>
+
+            <ul>
+              <li>Digital Marketing Support</li>
+              <li>Customer Handling & PR</li>
+              <li>Customer Calls & Inquiries</li>
+              <li>Brand Promotions</li>
+            </ul>
+
           </div>
 
-          <div className="dor-benefit-card">
-            Advanced Billing & Booking Software
+
+          {/* WHAT YOU GET */}
+          <div className="dor-overview-card">
+
+            <h3>What You Get</h3>
+
+            <ul>
+              <li>Complete Outfit Inventory</li>
+              <li>Advanced Billing & Booking Software</li>
+              <li>End-to-End Training</li>
+              <li>Proven Business Model</li>
+            </ul>
+
           </div>
 
-          <div className="dor-benefit-card">
-            End-to-End Training & Support
-          </div>
 
-          <div className="dor-benefit-card">
-            Proven Business Model
-            <span>(Since 2018)</span>
+          {/* REQUIREMENTS */}
+          <div className="dor-overview-card">
+
+            <h3>Requirements</h3>
+
+            <ul>
+              <li>Investment: ₹15L – ₹40L</li>
+              <li>Showroom Size: 1000 sq ft</li>
+              <li>Royalty: 10% – 40%</li>
+            </ul>
+
           </div>
 
         </div>
@@ -125,11 +147,12 @@ function PartnershipPage() {
 
             <p>
               Franchise Owned, Franchise Operated.
-              You run the operations while using our brand,
-              inventory and support.
+              You manage the showroom operations while using
+              our brand, inventory, and support system.
             </p>
 
           </div>
+
 
           <div className="dor-model-card">
 
@@ -137,38 +160,10 @@ function PartnershipPage() {
 
             <p>
               Franchise Owned, Company Operated.
-              You invest while we manage operations and business growth.
+              You invest in the business while our team
+              handles operations and business growth.
             </p>
 
-          </div>
-
-        </div>
-
-      </section>
-
-
-      {/* REQUIREMENTS */}
-      <section className="dor-partner-section dor-section-light">
-
-        <h2 className="dor-section-title">
-          Key Requirements & Investment
-        </h2>
-
-        <div className="dor-requirements-grid">
-
-          <div className="dor-requirement-card">
-            <h4>Investment</h4>
-            <p>₹15L – ₹40L</p>
-          </div>
-
-          <div className="dor-requirement-card">
-            <h4>Showroom Size</h4>
-            <p>1000 sq ft minimum</p>
-          </div>
-
-          <div className="dor-requirement-card">
-            <h4>Royalty</h4>
-            <p>10% – 40%</p>
           </div>
 
         </div>
@@ -188,9 +183,14 @@ function PartnershipPage() {
           and full operational support.
         </p>
 
-        <button className="dor-partner-btn dor-partner-btn-large">
-          Contact Us
-        </button>
+        <a
+href="https://wa.me/919764767007?text=Hi%20Dress%20On%20Rent%20Team,%20I%20want%20more%20information%20about%20the%20franchise."
+target="_blank"
+rel="noopener noreferrer"
+className="dor-partner-btn dor-partner-btn-large"
+>
+Contact Us
+</a>
 
       </section>
 

@@ -248,7 +248,7 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
       {/* SEO Optimization with React Helmet */}
       <Helmet>
         {/* Optimized Title Tag */}
-        <title>Dress On Rent (DOR): Luxury Lehengas, Sherwanis & Gowns for Rent in Pune & Nagpur</title>
+        <title> DOR - Dress On Rent: Luxury Lehengas, Sherwanis & Gowns for Rent in Pune & Nagpur</title>
 
         {/* Optimized Meta Description */}
         <meta name="description" content="DOR offers exquisite designer lehengas, bridal gowns, sherwanis, and suits for rent in Pune & Nagpur. Discover sustainable luxury for weddings, parties, and special occasions. Book your rental outfit today! Find affordable, eco-friendly dress rental services with hassle-free options." />
