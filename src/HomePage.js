@@ -19,6 +19,7 @@ import CustomerReviewsSection from "./components/CustomerReviewsSection";
 import Header from "./components/Header";
 import CollaborationSection from "./components/CollaborationSection";
 import EarnWithUsModal from "./components/EarnWithUsModal";
+import ReviewsSection from './components/ReviewsSection';
 const WhatsAppIcon = ({ size = 20 }) => (
   <svg
     width={size}
@@ -552,7 +553,8 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
       {/* live list */}
       {/* <CustomerReviewsSection /> */}
-      <CustomerReviewUpload onSubmitted={() => console.log("uploaded")} />
+      {/* <CustomerReviewUpload onSubmitted={() => console.log("uploaded")} /> */}
+      <ReviewsSection />
       
       
 

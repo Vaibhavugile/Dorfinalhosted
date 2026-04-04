@@ -1,0 +1,401 @@
+/* ===============================
+   DOR PREMIUM REVIEWS SECTION
+   =============================== */
+
+.bmm-reviews{
+background:linear-gradient(180deg,#F6F1EC 0%,#F3EFEA 100%);
+padding:100px 4vw;
+color:#1c1c1c;
+font-family:"Poppins",sans-serif;
+position:relative;
+}
+
+/* soft highlight background */
+
+.bmm-reviews::before{
+content:"";
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:1200px;
+height:380px;
+background:radial-gradient(circle,#ffffff70 0%,transparent 70%);
+pointer-events:none;
+}
+
+/* ===============================
+   CONTAINER
+   =============================== */
+
+.bmm-reviews-inner{
+max-width:1300px;
+margin:auto;
+position:relative;
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+
+.bmm-reviews-header{
+text-align:center;
+margin-bottom:40px;
+}
+
+.bmm-title{
+font-size:2.5rem;
+font-family:"Playfair Display",serif;
+font-weight:700;
+letter-spacing:.5px;
+margin:0;
+color:#1c1c1c;
+}
+
+.bmm-title span{
+color:#997860;
+}
+
+.bmm-sub{
+margin-top:12px;
+color:#6b6b6b;
+font-size:0.95rem;
+letter-spacing:.3px;
+}
+
+/* ===============================
+   SCORE CARD
+   =============================== */
+
+.bmm-score-row{
+display:flex;
+justify-content:center;
+margin:30px 0 50px;
+}
+
+.bmm-score-card{
+display:flex;
+align-items:center;
+gap:25px;
+
+background:rgba(255,255,255,0.75);
+backdrop-filter:blur(10px);
+
+padding:22px 32px;
+border-radius:16px;
+
+border:1px solid rgba(0,0,0,0.05);
+
+box-shadow:
+0 25px 60px rgba(0,0,0,0.08),
+inset 0 1px 0 rgba(255,255,255,0.6);
+
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.bmm-score-number{
+font-size:2.2rem;
+font-weight:800;
+color:#1c1c1c;
+}
+
+.bmm-stars{
+display:flex;
+gap:6px;
+margin-top:6px;
+}
+
+.bmm-score-sub{
+font-size:.9rem;
+color:#777;
+margin-top:4px;
+}
+
+/* ===============================
+   BUTTONS
+   =============================== */
+
+.bmm-score-action{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.bmm-btn-ghost{
+border:1px solid rgba(0,0,0,0.08);
+background:white;
+padding:8px 18px;
+border-radius:999px;
+font-weight:600;
+cursor:pointer;
+
+transition:all .25s ease;
+}
+
+.bmm-btn-ghost:hover{
+background:#f5f5f5;
+transform:translateY(-2px);
+}
+
+.bmm-btn-primary{
+background:linear-gradient(135deg,#a47b5b,#997860);
+color:white;
+border:none;
+padding:8px 18px;
+border-radius:999px;
+font-weight:600;
+cursor:pointer;
+
+box-shadow:0 10px 20px rgba(153,120,96,.35);
+
+transition:all .25s ease;
+}
+
+.bmm-btn-primary:hover{
+transform:translateY(-2px);
+box-shadow:0 14px 30px rgba(153,120,96,.45);
+}
+
+/* ===============================
+   CAROUSEL
+   =============================== */
+
+.bmm-carousel-wrap{
+display:flex;
+align-items:center;
+gap:16px;
+}
+
+.bmm-carousel{
+display:flex;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+gap:24px;
+padding:20px 8px;
+
+scrollbar-width:none;
+}
+
+.bmm-carousel::-webkit-scrollbar{
+display:none;
+}
+
+/* ===============================
+   REVIEW CARD
+   =============================== */
+
+.bmm-card{
+
+scroll-snap-align:center;
+
+min-width:320px;
+width:320px;
+
+background:rgba(255,255,255,0.9);
+
+border-radius:18px;
+padding:24px;
+
+border:1px solid rgba(0,0,0,0.04);
+
+box-shadow:
+0 25px 45px rgba(0,0,0,0.08),
+inset 0 1px 0 rgba(255,255,255,0.6);
+
+display:flex;
+flex-direction:column;
+gap:14px;
+
+transition:
+transform .35s cubic-bezier(.22,.9,.32,1),
+box-shadow .35s ease;
+}
+
+.bmm-card:hover{
+transform:translateY(-10px);
+box-shadow:
+0 35px 70px rgba(0,0,0,0.15),
+inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.bmm-card.active{
+transform:translateY(-12px);
+}
+
+/* ===============================
+   CARD TOP
+   =============================== */
+
+.bmm-card-top{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+/* avatar */
+
+.bmm-avatar{
+width:56px;
+height:56px;
+border-radius:50%;
+
+background:linear-gradient(135deg,#a47b5b,#997860);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+color:white;
+font-weight:700;
+
+box-shadow:0 6px 12px rgba(0,0,0,0.15);
+}
+
+.bmm-avatar img{
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:50%;
+}
+
+.bmm-initials{
+font-size:18px;
+}
+
+/* ===============================
+   META
+   =============================== */
+
+.bmm-name{
+font-weight:700;
+letter-spacing:.4px;
+color:#1c1c1c;
+}
+
+.bmm-rating{
+display:flex;
+gap:6px;
+margin-top:4px;
+}
+
+/* ===============================
+   REVIEW TEXT
+   =============================== */
+
+.bmm-text{
+font-style:italic;
+color:#4a4a4a;
+line-height:1.55;
+font-size:.95rem;
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+
+.bmm-card-footer{
+font-size:.85rem;
+color:#888;
+}
+
+/* ===============================
+   DOTS
+   =============================== */
+
+.bmm-dots{
+display:flex;
+justify-content:center;
+gap:10px;
+margin-top:30px;
+}
+
+.bmm-dot{
+width:10px;
+height:10px;
+border-radius:50%;
+background:#d8c8bb;
+border:none;
+cursor:pointer;
+transition:all .25s ease;
+}
+
+.bmm-dot.active{
+background:#997860;
+transform:scale(1.3);
+}
+
+/* ===============================
+   ARROWS
+   =============================== */
+
+.bmm-arrow{
+width:42px;
+height:42px;
+
+border-radius:50%;
+
+background:white;
+border:1px solid rgba(0,0,0,0.05);
+
+font-size:22px;
+cursor:pointer;
+
+box-shadow:0 8px 20px rgba(0,0,0,0.12);
+
+transition:all .25s ease;
+}
+
+.bmm-arrow:hover{
+transform:translateY(-2px);
+box-shadow:0 14px 30px rgba(0,0,0,0.18);
+}
+
+/* ===============================
+   MOBILE
+   =============================== */
+
+@media(max-width:768px){
+
+.bmm-reviews{
+padding:80px 5vw;
+}
+
+.bmm-title{
+font-size:1.9rem;
+}
+
+.bmm-carousel-wrap{
+gap:0;
+}
+
+.bmm-arrow{
+display:none;
+}
+
+.bmm-card{
+min-width:88%;
+width:88%;
+padding:20px;
+}
+
+.bmm-text{
+font-size:.9rem;
+}
+
+}
+
+/* ===============================
+   REDUCED MOTION
+   =============================== */
+
+@media(prefers-reduced-motion:reduce){
+
+.bmm-card,
+.bmm-dot,
+.bmm-arrow{
+transition:none !important;
+transform:none !important;
+}
+
+}
