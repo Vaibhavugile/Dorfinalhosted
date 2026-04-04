@@ -134,7 +134,7 @@ const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
    {
     id: "pune-mgroad",
     name: "DOR — Mumbai",
-    address: "Showroom no.1 & 2, Nutan Dream, Madhur society, Babhai Naka, Borivali West, Mumbai, Maharashtra - 400092",
+    address: "Coming Soon",
     phoneDisplay: "+918698797007",
     phone: "+918698797007",
     email: "contact@dordressonrent.com",

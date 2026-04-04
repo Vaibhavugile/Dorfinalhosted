@@ -8,13 +8,14 @@ export default function CollaborationSection({
   sectionTitle = "Collaboration",
   sectionSubtitle = "Our favorite creator moments ✦",
   videos = [
-    { src: "/video1.mp4", ig: "https://www.instagram.com/reel/CtswhecNsFf/?igsh=MWFqOXlneGhkdnUzMg==" },
+    { src: "/video5.mp4", ig: "https://www.instagram.com/reel/DCoW9e1yVwM/?igsh=MWExMXRjazZ1eXB5ZA==" },
     { src: "/Video-682.mp4", ig: "https://www.instagram.com/reel/DPjEUKmDOsj/?igsh=eXlyejRoZHE1ODlk" },
     { src: "/Video-369.mp4", ig: "https://www.instagram.com/reel/DPgJ3BIjd5J/?igsh=cXV0eDZpdDlqZWNr" },
     { src: "/Video-520.mp4", ig: "https://www.instagram.com/reel/DNQwKm3CPeW/?igsh=MTJwN2w2d3hrem84NQ%3D%3D" },
-    { src: "/video3.mp4", ig: "https://www.instagram.com/reel/DWWglhaEaWT/?igsh=MWR1MWszZ3VlZmhmYQ==" },
     { src: "/video4.mp4", ig: "https://www.instagram.com/reel/DWNeaXIFfOB/?igsh=N2Jqdmw0YmdldGMw" },
-
+    { src: "/video6.mp4", ig: "https://www.instagram.com/reel/DDPfZg7ybHM/?igsh=dHpndjNpaWxlYTdu" },
+    { src: "/video7.mp4", ig: "https://www.instagram.com/reel/CmYLtSmLrvb/?igsh=MTJxeHYyYTF2YzFoaA==" },
+    { src: "/video8.mp4", ig: "https://www.instagram.com/reel/C87LtlossI9/?igsh=MTNoMHIyMWpxMmdybg==" },
   ],
   threshold = 0.35, // % visible before play
 }) {
