@@ -13,7 +13,7 @@
 }
 
 /* ---------- Layout shells ---------- */
-.blox-shell{ max-width: 1200px; margin-inline:auto; padding-inline: 16px; }
+.blox-shell{ max-width: 1200px; margin-inline:auto; padding-inline: 16px;margin-top: 40px; }
 .blox-pad{ padding-block: 56px; background-color: #F3EFEA; }
 
 /* ---------- Headings / type ---------- */

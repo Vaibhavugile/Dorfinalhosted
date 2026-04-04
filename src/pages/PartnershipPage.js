@@ -21,7 +21,7 @@ function PartnershipPage() {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
   return (
-    <div className="dor-partner-page">
+    <div className={`home-page dor-partner-page light-theme`}>
       <Header
         theme={theme}
         toggleTheme={toggleTheme}

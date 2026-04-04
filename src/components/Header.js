@@ -22,7 +22,7 @@ function Header({
           <Link to="/" className="header-logo animate-pulse-custom">
             <div className="logo-3d-container">
               <img
-                src={theme === "light" ? logo2 : logo1}
+                src={theme === "light" ? logo2 : logo2}
                 alt="Dress On Rent"
                 className="logo-image"
               />

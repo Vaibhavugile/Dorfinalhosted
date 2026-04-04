@@ -7,6 +7,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import { collection, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 import { Helmet } from "react-helmet-async";
 import { db } from "../firebaseConfig";
+import Header from "../components/Header";
+import EarnWithUsModal from "../components/EarnWithUsModal";
 import "./blog.css";
 
 export default function BlogsPage() {
@@ -16,6 +18,21 @@ export default function BlogsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [showEarnModal, setShowEarnModal] = useState(false);
+const theme = "light";
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+  // New states for dynamic filter options
+  const [dynamicStores, setDynamicStores] = useState([]);
+  const [dynamicColors, setDynamicColors] = useState([]);
+  const [dynamicSizes, setDynamicSizes] = useState([]);
+
+
 
   const q = (searchParams.get("q") || "").trim();
   const tag = (searchParams.get("tag") || "").trim();
@@ -93,16 +110,27 @@ export default function BlogsPage() {
   };
 
   return (
-    <section className="blox-pad">
-      <Helmet>
+<section className={`home-page blox-pad light-theme`}>      <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content="Read outfit tips, wedding style guides, lehenga & sherwani care, pricing, and DOR updates." />
-        <link rel="canonical" href={typeof window!=="undefined" ? window.location.href : "https://example.com/blog"} />
+        <link rel="canonical" href={typeof window !== "undefined" ? window.location.href : "https://example.com/blog"} />
       </Helmet>
+      <EarnWithUsModal
+        showEarnModal={showEarnModal}
+        setShowEarnModal={setShowEarnModal}
+        theme={theme}
+      />
+      <Header
+        scrolled={scrolled}
+        isMobileMenuOpen={isMobileMenuOpen}
+        toggleMobileMenu={toggleMobileMenu}
+        setShowEarnModal={setShowEarnModal}
+      />
 
       <div className="blox-shell">
         {/* HERO + TOOLS */}
         <header className="blox-hero">
+
           <div className="blox-heroCard">
             <h1 className="blox-title">DOR Blog</h1>
             <p className="blox-heroSub">Style stories & rental wisdom.</p>
@@ -142,7 +170,7 @@ export default function BlogsPage() {
           </ul>
         )}
 
-        {error && <p className="blox-text" style={{color:'#ef4444'}}>{error}</p>}
+        {error && <p className="blox-text" style={{ color: '#ef4444' }}>{error}</p>}
 
         {!loading && (
           <>
@@ -158,7 +186,7 @@ export default function BlogsPage() {
                       <p className="blox-cardSub">{p.excerpt || "Read more"}</p>
                       {Array.isArray(p.tags) && p.tags.length > 0 && (
                         <div className="blox-tags">
-                          {p.tags.slice(0,3).map((t) => (
+                          {p.tags.slice(0, 3).map((t) => (
                             <button
                               key={t}
                               className="blox-chip"
@@ -172,7 +200,7 @@ export default function BlogsPage() {
                           ))}
                         </div>
                       )}
-                      <div style={{marginTop:12}}>
+                      <div style={{ marginTop: 12 }}>
                         <Link to={`/blog/${p.slug || p.id}`} className="blox-btn blox-btnGhost">Read more</Link>
                       </div>
                     </div>
